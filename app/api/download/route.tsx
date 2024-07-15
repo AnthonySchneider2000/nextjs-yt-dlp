@@ -3,27 +3,18 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import os from 'os';
 
-// Function to determine the correct path for yt-dlp.exe based on OS
-function getYtDlpPath(): string {
-  const platform = os.platform();
-  if (platform === 'win32') {
-    // Windows path example
-    return path.join(process.cwd(), 'yt-dlp', 'yt-dlp.exe');
-  } else if (platform === 'linux') {
-    // Linux path example
-    return path.join(process.cwd(), 'yt-dlp', 'yt-dlp-linux');
-    // Adjust the file name according to the version you downloaded
-  } else {
-    throw new Error(`Unsupported platform: ${platform}`);
-  }
-}
+const YT_DLP_FOLDER = path.join(process.cwd(), 'yt-dlp');
 export async function POST(req: Request): Promise<Response> {
   const { command } = await req.json();
   const outputDir = os.tmpdir(); // use system's temporary directory
   const outputFilePath = path.join(outputDir, 'downloaded_video.mp4'); // specify the output file path
   
   return new Promise((resolve, reject) => {
-    const ytDlpCommand = `"${getYtDlpPath()}" -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
+    const platform = os.platform();
+    console.log("platform:", platform);
+    const isLinux = platform === 'linux';
+    const YT_DLP_PATH = isLinux ? path.join(YT_DLP_FOLDER, 'yt-dlp_linux') : path.join(YT_DLP_FOLDER, 'yt-dlp.exe');
+    const ytDlpCommand = `"${YT_DLP_PATH}" -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
     console.log("ytDlpCommand:", ytDlpCommand);
     
     exec(ytDlpCommand, async (err, stdout, stderr) => {
