@@ -3,17 +3,19 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import os from 'os';
 
+const YT_DLP_PATH = path.join(process.cwd(), 'yt-dlp', 'yt-dlp.exe');
 export async function POST(req: Request): Promise<Response> {
   const { command } = await req.json();
   const outputDir = os.tmpdir(); // use system's temporary directory
   const outputFilePath = path.join(outputDir, 'downloaded_video.mp4'); // specify the output file path
-
+  
   return new Promise((resolve, reject) => {
-    const ytDlpCommand = `./yt-dlp.exe -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
+    const ytDlpCommand = `"${YT_DLP_PATH}" -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
+    console.log("ytDlpCommand:", ytDlpCommand);
     
     exec(ytDlpCommand, async (err, stdout, stderr) => {
       if (err) {
-        console.error(stderr);
+        console.error("error:", stderr);
         return reject(new Response("Error downloading video", { status: 500 }));
       }
 
