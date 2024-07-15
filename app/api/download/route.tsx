@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import os from 'os';
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<Response> {
   const { command } = await req.json();
   const outputDir = os.tmpdir(); // use system's temporary directory
   const outputFilePath = path.join(outputDir, 'downloaded_video.mp4'); // specify the output file path
