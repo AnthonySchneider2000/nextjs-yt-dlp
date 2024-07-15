@@ -10,6 +10,8 @@ export async function POST(req: Request): Promise<Response> {
   const outputFilePath = path.join(outputDir, 'downloaded_video.mp4'); // specify the output file path
   
   return new Promise((resolve, reject) => {
+    const platform = os.platform();
+    console.log("platform:", platform);
     const ytDlpCommand = `"${YT_DLP_PATH}" -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
     console.log("ytDlpCommand:", ytDlpCommand);
     
