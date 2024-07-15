@@ -25,7 +25,7 @@ export default function RootLayout({
       >
         <body className={inter.className}>
           <Header />
-          <main className="p-4 flex flex-col">
+          <main className="p-4 flex flex-col items-center">
             {children}
 
           </main>
