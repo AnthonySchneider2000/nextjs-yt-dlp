@@ -14,7 +14,7 @@ export async function POST(req: Request): Promise<Response> {
     console.log("platform:", platform);
     const isLinux = platform === 'linux';
     const YT_DLP_PATH = isLinux ? path.join(YT_DLP_FOLDER, 'yt-dlp_linux') : path.join(YT_DLP_FOLDER, 'yt-dlp.exe');
-    const ytDlpCommand = `"${YT_DLP_PATH}" -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
+    const ytDlpCommand = `"${YT_DLP_PATH}" --no-cache-dir -o "${path.join(outputDir, 'downloaded_video.%(ext)s')}" ${command}`;
     console.log("ytDlpCommand:", ytDlpCommand);
     
     exec(ytDlpCommand, async (err, stdout, stderr) => {
